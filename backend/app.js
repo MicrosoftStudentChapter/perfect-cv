@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('./config/db');
-const session = require('express-session');
 const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
@@ -9,12 +8,6 @@ const leaderboardRoutes = require('./routes/leaderboardRoutes');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-}));
 
 app.use('/auth', authRoutes);
 app.use('/resume', resumeRoutes);

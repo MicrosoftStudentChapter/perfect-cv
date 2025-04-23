@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const { sendMail } = require('../utils/otpMailer');
 const { checkEmailInSheet } = require('../utils/verifyGoogleSheet');
 
@@ -18,8 +19,15 @@ const verifyOtp = async (req, res) => {
   user.username = username;
   user.otp = null;
   await user.save();
-  req.session.user = { email, username };
-  res.json({ msg: 'Logged in' });
+  
+  // Create and sign JWT token
+  const token = jwt.sign(
+    { id: user._id, email, username },
+    process.env.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+  
+  res.json({ msg: 'Logged in', token });
 };
 
 module.exports = { sendOtp, verifyOtp };
