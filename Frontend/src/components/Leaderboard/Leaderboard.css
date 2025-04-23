@@ -1,0 +1,186 @@
+.leaderboard-container {
+    min-height: 100vh;
+    width: 100vw;
+    background-image: url('C:\Users\HP\OneDrive\Desktop\PerfectCV\perfect-cv\Frontend\src\assets\images\background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Special Elite', cursive;
+}
+
+.nav-bar {
+    width: 100%;
+    position: relative;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.logo-section {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.site-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 95px;
+    color: #000000;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 15px;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.2s;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    font-size: 28px;
+}
+
+.logout-button:hover {
+    transform: scale(1.1);
+}
+
+.sidebar {
+    position: fixed;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-button {
+    font-family: 'Special Elite', cursive;
+    font-size: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.nav-button.active {
+    color: #000;
+    font-weight: bold;
+}
+
+.nav-button.active::before {
+    content: '•';
+    position: absolute;
+    left: -20px;
+    color: #000;
+}
+
+.nav-button:not(.active) {
+    color: #999;
+}
+
+.leaderboard-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 120px;
+    margin-top: 20px;
+}
+
+.sort-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.sort-dropdown {
+    background: #fff;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-family: 'Special Elite', cursive;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px 1fr;
+    gap: 20px;
+    padding: 15px 20px;
+    border-bottom: 2px solid #eee;
+    font-family: 'Special Elite', cursive;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px 1fr;
+    gap: 20px;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    font-family: 'Special Elite', cursive;
+    font-size: 16px;
+    align-items: center;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.rank-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-cell {
+    font-family: 'Special Elite', cursive;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    font-family: 'Special Elite', cursive;
+}
+
+.score-cell {
+    font-weight: bold;
+    font-family: 'Special Elite', cursive;
+} 

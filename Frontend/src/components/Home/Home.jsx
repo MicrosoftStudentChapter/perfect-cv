@@ -105,7 +105,7 @@ const Home = () => {
 
             <div className="sidebar">
                 <button className="nav-button active">HOME</button>
-                <button className="nav-button">Leaderboard</button>
+                <button className="nav-button" onClick={() => navigate('/leaderboard')}>Leaderboard</button>
             </div>
 
             <main className="main-content">
