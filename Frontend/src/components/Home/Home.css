@@ -1,0 +1,234 @@
+.home-container {
+    min-height: 100vh;
+    width: 100vw;
+    background-image: url('C:\Users\HP\OneDrive\Desktop\PerfectCV\perfect-cv\Frontend\src\assets\images\background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.nav-bar {
+    width: 100%;
+    position: relative;
+    height: 120px;
+}
+
+.logo-section {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.site-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 95px;
+    color: #000000;
+    text-align: center;
+    line-height: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 15px;
+    letter-spacing: 0;
+    font-weight: 400;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.site-title span {
+    display: block;
+    text-align: center;
+}
+
+.site-title span:last-child {
+    font-size: 100%;
+    margin-top: -10px;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.2s;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    font-size: 32px;
+}
+
+.logout-button:hover {
+    transform: scale(1.1);
+}
+
+.sidebar {
+    position: fixed;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-button {
+    font-family: 'Hanuman', serif;
+    font-size: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.nav-button.active {
+    color: #000;
+    font-weight: bold;
+}
+
+.nav-button.active::before {
+    content: '•';
+    position: absolute;
+    left: -20px;
+    color: #000;
+}
+
+.nav-button:not(.active) {
+    color: #999;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    margin-top: -40px;
+}
+
+.upload-section {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section h2 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fff;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-area.dragging {
+    border-color: #007AFF;
+    background-color: rgba(0, 122, 255, 0.05);
+}
+
+.upload-icon {
+    color: #007AFF;
+    margin-bottom: 15px;
+    font-size: 42px;
+}
+
+.upload-area p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.browse-label {
+    color: #007AFF;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.browse-label:hover {
+    text-decoration: underline;
+}
+
+.file-types {
+    font-size: 13px !important;
+    color: #999 !important;
+    margin-top: 10px !important;
+}
+
+.uploading-files {
+    margin-top: 20px;
+}
+
+.upload-progress {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.upload-progress span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.upload-progress span .file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.upload-progress span .percentage {
+    color: #007AFF;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: #007AFF;
+    transition: width 0.3s ease;
+} 

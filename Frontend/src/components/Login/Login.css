@@ -17,14 +17,14 @@
 
 .logo-section {
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: 12px;
+    left: 13px;
     z-index: 2;
 }
 
 .logo {
-    width: 250px;
-    height: 250px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
 }
 
@@ -81,7 +81,7 @@
 
 .form-group input {
     padding: 12px 16px;
-    border: 1px solid #E0E0E0;
+    border:  solid #E0E0E0;
     border-radius: 8px;
     font-size: 16px;
     font-family: 'Nunito Sans', sans-serif;
