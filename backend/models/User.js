@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   otp: String,
   atsScore: Number,
   cloudinaryUrl: String,
+  atsChecksRemaining: { type: Number, default: 2 },
   createdAt: { type: Date, default: Date.now },
 });
 
