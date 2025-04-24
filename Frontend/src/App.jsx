@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 // import Register from './components/Register/Register';
-import Leaderboard from './components/Leaderboard/Leaderboard';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -35,14 +34,6 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <Home />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/leaderboard" 
-                    element={
-                        <ProtectedRoute>
-                            <Leaderboard />
                         </ProtectedRoute>
                     }
                 />

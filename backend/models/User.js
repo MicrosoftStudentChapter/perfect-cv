@@ -6,7 +6,8 @@ const atsCheckSchema = new mongoose.Schema({
   openaiScore: Number,
   combinedScore: Number,
   feedback: String,
-  jobDescription: String
+  jobDescription: String,
+  resumeUrl: String
 });
 
 const userSchema = new mongoose.Schema({
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema({
   cloudinaryUrl: String,
   atsChecksRemaining: { type: Number, default: 2 },
   atsCheckHistory: [atsCheckSchema],
+  hasSubmitted: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 
