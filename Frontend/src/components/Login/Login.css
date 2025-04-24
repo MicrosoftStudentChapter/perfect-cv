@@ -97,8 +97,21 @@
 .form-options {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 4px;
+    margin-bottom: 20px;
+}
+
+.form-options button {
+    background: none;
+    border: none;
+    color: #0066cc;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+}
+
+.form-options button:hover {
+    color: #004c99;
 }
 
 .remember-me {
@@ -154,15 +167,24 @@
     background: #333;
 }
 
+.login-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
 .error-message {
-    background-color: #fde8e8;
-    color: #e53e3e;
-    padding: 12px;
-    border-radius: 8px;
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 4px;
     margin-bottom: 20px;
     text-align: center;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
+}
+
+#otp {
+    letter-spacing: 2px;
+    font-size: 18px;
+    text-align: center;
 }
 
 /* Responsive adjustments */

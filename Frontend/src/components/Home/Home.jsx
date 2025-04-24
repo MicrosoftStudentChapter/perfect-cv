@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/images/logo.png';
@@ -10,6 +10,40 @@ const Home = () => {
     const navigate = useNavigate();
     const [uploadingFiles, setUploadingFiles] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [atsScore, setAtsScore] = useState(null);
+    const [atsFeedback, setAtsFeedback] = useState('');
+    const [checksRemaining, setChecksRemaining] = useState(2);
+    const [jobDescription, setJobDescription] = useState('Software developers');
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Get user's remaining ATS checks
+        const fetchRemainingChecks = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    navigate('/');
+                    return;
+                }
+
+                const response = await axios.get('http://localhost:5000/resume/ats-checks', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                setChecksRemaining(response.data.checksRemaining);
+            } catch (error) {
+                console.error('Failed to fetch remaining checks:', error);
+                if (error.response?.status === 401) {
+                    handleLogout();
+                }
+            }
+        };
+
+        fetchRemainingChecks();
+    }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -40,50 +74,69 @@ const Home = () => {
         handleFiles(files);
     };
 
+    const handleJobDescriptionChange = (e) => {
+        setJobDescription(e.target.value);
+    };
+
     const handleFiles = async (files) => {
         const validFiles = files.filter(file => {
-            const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 
-                              'application/pdf', 'application/psd', 'application/ai',
-                              'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                              'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
-            return validTypes.includes(file.type);
+            return file.type === 'application/pdf';
         });
 
         if (validFiles.length === 0) {
-            alert('Please upload valid file formats');
+            alert('Please upload PDF files only');
             return;
         }
 
-        setUploadingFiles(validFiles.map(file => ({
+        // Only process the first file
+        const file = validFiles[0];
+        
+        setUploadingFiles([{
             name: file.name,
             progress: 0
-        })));
+        }]);
 
-        for (const file of validFiles) {
-            const formData = new FormData();
-            formData.append('file', file);
+        setIsLoading(true);
+        setAtsScore(null);
+        setAtsFeedback('');
 
-            try {
-                const response = await axios.post('http://localhost:5000/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    onUploadProgress: (progressEvent) => {
-                        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                        setUploadingFiles(prev => prev.map(f => 
-                            f.name === file.name ? { ...f, progress } : f
-                        ));
-                    }
-                });
+        const formData = new FormData();
+        formData.append('resume', file);
+        formData.append('jobDescription', jobDescription);
 
-                if (response.data.success) {
-                    setUploadingFiles(prev => prev.filter(f => f.name !== file.name));
+        try {
+            const response = await axios.post('http://localhost:5000/resume/upload?atsCheck=true', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadingFiles([{ name: file.name, progress }]);
                 }
-            } catch (error) {
-                console.error('Upload failed:', error);
+            });
+
+            setUploadingFiles([]);
+            setIsLoading(false);
+            
+            if (response.data) {
+                setAtsScore(response.data.atsScore);
+                setAtsFeedback(response.data.atsFeedback);
+                setChecksRemaining(response.data.checksRemaining);
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+            setIsLoading(false);
+            setUploadingFiles([]);
+            
+            if (error.response?.status === 401) {
+                handleLogout();
+            } else if (error.response?.status === 403) {
+                alert('You have used all your available ATS checks');
+            } else if (error.response?.data?.error) {
+                alert(error.response.data.error);
+            } else {
                 alert(`Failed to upload ${file.name}`);
-                setUploadingFiles(prev => prev.filter(f => f.name !== file.name));
             }
         }
     };
@@ -109,8 +162,24 @@ const Home = () => {
             </div>
 
             <main className="main-content">
+                <div className="ats-info-section">
+                    <h2>ATS Checker</h2>
+                    <p>Remaining checks: <strong>{checksRemaining}</strong></p>
+                    <p>Upload your resume to check its ATS compatibility score.</p>
+                </div>
+
+                <div className="job-description-section">
+                    <h3>Job Description</h3>
+                    <textarea
+                        value={jobDescription}
+                        onChange={handleJobDescriptionChange}
+                        placeholder="Enter job description here (default: Software developers)"
+                        rows={3}
+                    />
+                </div>
+
                 <div className="upload-section">
-                    <h2>Upload</h2>
+                    <h2>Upload Resume</h2>
                     <div 
                         className={`upload-area ${isDragging ? 'dragging' : ''}`}
                         onDragOver={handleDragOver}
@@ -118,14 +187,13 @@ const Home = () => {
                         onDrop={handleDrop}
                     >
                         <FiUpload className="upload-icon" />
-                        <p>Drag & drop files or <label className="browse-label">Browse<input
+                        <p>Drag & drop your resume or <label className="browse-label">Browse<input
                             type="file"
                             onChange={handleFileSelect}
-                            multiple
-                            accept=".jpg,.jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx"
+                            accept=".pdf"
                             style={{ display: 'none' }}
                         /></label></p>
-                        <p className="file-types">Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</p>
+                        <p className="file-types">Supported format: PDF</p>
                     </div>
 
                     {uploadingFiles.length > 0 && (
@@ -147,6 +215,28 @@ const Home = () => {
                         </div>
                     )}
                 </div>
+
+                {isLoading && (
+                    <div className="loading-section">
+                        <p>Analyzing your resume...</p>
+                    </div>
+                )}
+
+                {atsScore !== null && (
+                    <div className="results-section">
+                        <h2>ATS Score: {atsScore}/100</h2>
+                        <div className="feedback-container">
+                            <h3>Feedback</h3>
+                            <div className="feedback-content">
+                                {atsFeedback.split('\n').map((line, index) => (
+                                    line.trim() ? (
+                                        <p key={index} dangerouslySetInnerHTML={{ __html: line.startsWith('•') ? line : line.startsWith('##') ? `<strong>${line.replace('##', '')}</strong>` : line }} />
+                                    ) : <br key={index} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </main>
         </div>
     );
