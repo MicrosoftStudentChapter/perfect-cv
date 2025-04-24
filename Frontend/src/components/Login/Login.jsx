@@ -5,7 +5,7 @@ import logo from '../../assets/images/logo.png';
 // import background from '../../assets/images/background.jpg';
 import './Login.css';
 
-const URL = import.meta.env.VITE_URL || "https://backend.perfectcv.mlsctiet.com";
+const URL = import.meta.env.VITE_URL;
 
 const Login = () => {
     const [step, setStep] = useState('email'); // 'email' or 'otp'
