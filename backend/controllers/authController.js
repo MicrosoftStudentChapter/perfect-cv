@@ -5,7 +5,7 @@ const { checkEmailInSheet } = require('../utils/verifyGoogleSheet');
 
 const sendOtp = async (req, res) => {
   const { email } = req.body;
-  if (!(await checkEmailInSheet(email))) return res.status(401).json({ msg: 'Not authorized' });
+  if (!(await checkEmailInSheet(email))) return res.status(401).json({ msg: 'Email not authorized. Please contact the administrator.' });
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   await sendMail(email, otp);
   await User.findOneAndUpdate({ email }, { otp }, { upsert: true });

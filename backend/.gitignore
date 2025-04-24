@@ -11,3 +11,4 @@ uploads/*
 !uploads/.gitkeep
 .vscode/
 package-lock.json
+config/credentials.json
