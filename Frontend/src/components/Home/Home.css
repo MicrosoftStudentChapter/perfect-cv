@@ -17,15 +17,15 @@
 
 /* Base layout */
 .app-container {
-  min-height: 100vh;
+    min-height: 100vh;
   width: 100%;
   background-color: var(--background-color);
   background-image: url('../../assets/images/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
   overflow-x: hidden;
 }
 
@@ -62,13 +62,13 @@
 .logout-button {
   display: flex;
   align-items: center;
-  background: none;
-  border: none;
+    background: none;
+    border: none;
   color: var(--secondary-color);
   font-size: 1rem;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
-  cursor: pointer;
+    cursor: pointer;
   transition: var(--transition);
 }
 
@@ -83,7 +83,7 @@
 
 /* Main content */
 .app-content {
-  display: flex;
+    display: flex;
   flex: 1;
   padding: 2rem;
   overflow: auto;
@@ -110,13 +110,13 @@
   margin-bottom: 0.5rem;
   border: none;
   border-radius: var(--border-radius);
-  background: none;
+    background: none;
   color: var(--secondary-color);
   font-size: 1rem;
   text-align: left;
-  cursor: pointer;
+    cursor: pointer;
   transition: var(--transition);
-  position: relative;
+    position: relative;
 }
 
 .nav-item.active {
@@ -139,7 +139,7 @@
 }
 
 .badge {
-  position: absolute;
+    position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   background-color: var(--primary-color);
@@ -170,9 +170,9 @@
 }
 
 .section-header {
-  display: flex;
+    display: flex;
   justify-content: space-between;
-  align-items: center;
+    align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--light-color);
@@ -200,11 +200,11 @@
 
 /* Upload area */
 .upload-area {
-  border: 2px dashed #ccc;
+    border: 2px dashed #ccc;
   border-radius: var(--border-radius);
   padding: 3rem 2rem;
-  text-align: center;
-  cursor: pointer;
+    text-align: center;
+    cursor: pointer;
   transition: var(--transition);
   margin-bottom: 1.5rem;
 }
@@ -227,13 +227,13 @@
 
 .browse-label {
   color: var(--primary-color);
-  cursor: pointer;
+    cursor: pointer;
   margin-left: 0.25rem;
   transition: var(--transition);
 }
 
 .browse-label:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .file-info {
@@ -613,9 +613,9 @@
 }
 
 .history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   margin-bottom: 1rem;
 }
 
@@ -642,7 +642,7 @@
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   max-height: 100px;
-  overflow: hidden;
+    overflow: hidden;
   position: relative;
   transition: max-height 0.3s ease;
 }

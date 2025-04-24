@@ -4,7 +4,7 @@ const { getATSScore } = require('../utils/atsClient');
 
 const handleUpload = async (req, res) => {
   try {
-    const { email } = req.user;
+  const { email } = req.user;
     
     // Check if file was uploaded
     if (!req.file) {
@@ -14,7 +14,7 @@ const handleUpload = async (req, res) => {
       });
     }
     
-    const fileBuffer = req.file.buffer;
+  const fileBuffer = req.file.buffer;
     
     // Find user
     const user = await User.findOne({ email });
@@ -23,7 +23,7 @@ const handleUpload = async (req, res) => {
     }
     
     // Upload resume to Cloudinary
-    const cloudinaryUrl = await uploadToCloudinary(fileBuffer);
+  const cloudinaryUrl = await uploadToCloudinary(fileBuffer);
     
     // Update user with new resume URL
     await User.findOneAndUpdate(

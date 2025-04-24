@@ -5,6 +5,8 @@ import logo from '../../assets/images/logo.png';
 // import background from '../../assets/images/background.jpg';
 import './Login.css';
 
+const URL = import.meta.env.VITE_URL || "https://backend.perfectcv.mlsctiet.com";
+
 const Login = () => {
     const [step, setStep] = useState('email'); // 'email' or 'otp'
     const [formData, setFormData] = useState({
@@ -36,7 +38,7 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/auth/send-otp', {
+            const response = await axios.post(`${URL}/auth/send-otp`, {
                 email: formData.email
             });
             
@@ -66,7 +68,7 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/auth/verify-otp', {
+            const response = await axios.post(`${URL}/auth/verify-otp`, {
                 email: formData.email,
                 otp: formData.otp,
                 username: formData.username
@@ -87,7 +89,7 @@ const Login = () => {
         setLoading(true);
         
         try {
-            const response = await axios.post('http://localhost:5000/auth/send-otp', {
+            const response = await axios.post(`${URL}/auth/send-otp`, {
                 email: formData.email
             });
             

@@ -5,6 +5,8 @@ import logo from '../../assets/images/logo.png';
 import { FiLogOut, FiUpload, FiCheck, FiFileText, FiUser, FiClock, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import './Home.css';
 
+const URL = import.meta.env.VITE_URL;
+
 const Home = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('upload');
@@ -48,7 +50,7 @@ const Home = () => {
                 }
 
                 // Get user data and remaining ATS checks
-                const response = await axios.get('http://localhost:5000/resume/ats-checks', {
+                const response = await axios.get(`${URL}/resume/ats-checks`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -66,7 +68,7 @@ const Home = () => {
                 
                 // Check if user has a resume
                 try {
-                    const resumeResponse = await axios.get('http://localhost:5000/resume/current', {
+                    const resumeResponse = await axios.get(`${URL}/resume/current`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -81,7 +83,7 @@ const Home = () => {
 
                 // Get ATS check history
                 try {
-                    const historyResponse = await axios.get('http://localhost:5000/resume/ats-history', {
+                    const historyResponse = await axios.get(`${URL}/resume/ats-history`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -152,7 +154,7 @@ const Home = () => {
         formData.append('resume', file);
 
             try {
-            const response = await axios.post('http://localhost:5000/resume/upload', formData, {
+            const response = await axios.post(`${URL}/resume/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -206,7 +208,7 @@ const Home = () => {
         try {
             // Using the new dedicated ATS check endpoint
             const response = await axios.post(
-                'http://localhost:5000/resume/ats-check', 
+                `${URL}/resume/ats-check`, 
                 { jobDescription },
                 {
                     headers: {
@@ -249,7 +251,7 @@ const Home = () => {
     // Get ATS check history
     const refreshAtsHistory = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/resume/ats-history', {
+            const response = await axios.get(`${URL}/resume/ats-history`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -289,7 +291,7 @@ const Home = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/resume/final-submit',
+                `${URL}/resume/final-submit`,
                 {},
                 {
                     headers: {
@@ -302,7 +304,7 @@ const Home = () => {
             setHasSubmitted(true);
             alert('Your resume has been successfully submitted!');
             
-        } catch (error) {
+            } catch (error) {
             console.error('Final submission failed:', error);
             setIsLoading(false);
             
@@ -335,7 +337,7 @@ const Home = () => {
                             <FiUser /> <span className="username">{username}</span>
                         </div>
                     )}
-                    <button onClick={handleLogout} className="logout-button">
+                <button onClick={handleLogout} className="logout-button">
                         <FiLogOut /> <span>Logout</span>
                     </button>
                 </div>
@@ -373,8 +375,8 @@ const Home = () => {
                         disabled={!currentResume || hasSubmitted}
                     >
                         <FiCheck /> <span>Final Submission</span>
-                    </button>
-                </nav>
+                </button>
+            </nav>
 
                 <main className="app-main">
                     {activeTab === 'upload' && (
@@ -386,28 +388,28 @@ const Home = () => {
                                         <p>Current resume: <a href={currentResume} target="_blank" rel="noopener noreferrer">View</a></p>
                                     </div>
                                 )}
-                            </div>
-                            
+            </div>
+
                             {hasSubmitted ? (
                                 <div className="info-panel">
                                     <p>You have already submitted your final resume. You cannot make any changes now.</p>
                                 </div>
                             ) : (
-                                <div 
-                                    className={`upload-area ${isDragging ? 'dragging' : ''}`}
-                                    onDragOver={handleDragOver}
-                                    onDragLeave={handleDragLeave}
-                                    onDrop={handleDrop}
-                                >
-                                    <FiUpload className="upload-icon" />
+                    <div 
+                        className={`upload-area ${isDragging ? 'dragging' : ''}`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    >
+                        <FiUpload className="upload-icon" />
                                     <p>Drag & drop your resume or <label className="browse-label">Browse<input
-                                        type="file"
-                                        onChange={handleFileSelect}
+                            type="file"
+                            onChange={handleFileSelect}
                                         accept=".pdf"
-                                        style={{ display: 'none' }}
-                                    /></label></p>
+                            style={{ display: 'none' }}
+                        /></label></p>
                                     <p className="file-info">Supported format: PDF only</p>
-                                </div>
+                    </div>
                             )}
                             
                             {uploadingFile && (
@@ -583,12 +585,12 @@ const Home = () => {
                                                         <><FiChevronDown /> Show More</>
                                                     }
                                                 </button>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    </div>
                                 </div>
-                            )}
+                            ))}
                         </div>
+                    )}
+                </div>
                     )}
                     
                     {activeTab === 'submit' && (
@@ -639,7 +641,7 @@ const Home = () => {
                             )}
                         </div>
                     )}
-                </main>
+            </main>
             </div>
         </div>
     );
