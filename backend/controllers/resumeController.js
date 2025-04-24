@@ -1,12 +1,21 @@
 const User = require('../models/User');
 const { uploadToCloudinary } = require('../utils/cloudinary');
-const { getATSScore } = require('../utils/atsApiClient');
+const { getATSScore } = require('../utils/atsClient');
 
 const handleUpload = async (req, res) => {
   try {
     const { email } = req.user;
+    
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ 
+        error: 'No resume file uploaded', 
+        message: 'Please upload a resume file (PDF format)' 
+      });
+    }
+    
     const fileBuffer = req.file.buffer;
-    const jobDescription = req.body.jobDescription || '';
+    const jobDescription = req.body.jobDescription || 'Software developers';
     
     // Find user
     const user = await User.findOne({ email });
@@ -29,22 +38,35 @@ const handleUpload = async (req, res) => {
         });
       }
       
-      // Get ATS score and feedback
+      // Get ATS score and feedback from multiple providers
       const atsResult = await getATSScore(cloudinaryUrl, jobDescription);
       
-      // Decrement remaining checks
+      // Create a new ATS check record
+      const atsCheckRecord = {
+        date: new Date(),
+        geminiScore: atsResult.geminiScore,
+        openaiScore: atsResult.openaiScore,
+        combinedScore: atsResult.combinedScore,
+        feedback: atsResult.feedback,
+        jobDescription: atsResult.jobDescription
+      };
+      
+      // Add ATS check to history and decrement remaining checks
       await User.findOneAndUpdate(
         { email }, 
         { 
           atsChecksRemaining: user.atsChecksRemaining - 1,
-          atsScore: atsResult.score,
-          cloudinaryUrl
+          atsScore: atsResult.combinedScore,
+          cloudinaryUrl,
+          $push: { atsCheckHistory: atsCheckRecord }
         }
       );
       
       return res.json({
         msg: 'Resume analyzed with ATS',
-        atsScore: atsResult.score,
+        atsScore: atsResult.combinedScore,
+        geminiScore: atsResult.geminiScore,
+        openaiScore: atsResult.openaiScore,
         atsFeedback: atsResult.feedback,
         checksRemaining: user.atsChecksRemaining - 1
       });
@@ -83,4 +105,21 @@ const getATSChecksRemaining = async (req, res) => {
   }
 };
 
-module.exports = { handleUpload, getATSChecksRemaining };
+// Get ATS check history for a user
+const getATSCheckHistory = async (req, res) => {
+  try {
+    const { email } = req.user;
+    const user = await User.findOne({ email }).select('atsCheckHistory');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({ atsCheckHistory: user.atsCheckHistory || [] });
+  } catch (error) {
+    console.error('Error getting ATS check history:', error);
+    res.status(500).json({ error: 'Failed to get ATS check history' });
+  }
+};
+
+module.exports = { handleUpload, getATSChecksRemaining, getATSCheckHistory };
