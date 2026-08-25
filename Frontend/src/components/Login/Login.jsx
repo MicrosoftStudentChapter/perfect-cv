@@ -101,6 +101,25 @@ const Login = () => {
         }
     };
 
+    const [demoLoading, setDemoLoading] = useState(false);
+
+    const handleDemoLogin = async () => {
+        setError('');
+        setDemoLoading(true);
+
+        try {
+            const response = await axios.post(`${URL}/auth/demo-login`);
+
+            if (response.data.token) {
+                localStorage.setItem('token', response.data.token);
+                navigate('/home');
+            }
+        } catch (err) {
+            setError(err.response?.data?.msg || 'Failed to start demo session. Please try again.');
+            setDemoLoading(false);
+        }
+    };
+
     return (
         <div className="page-container">
             <div className="logo-section">
@@ -194,6 +213,20 @@ const Login = () => {
                             </button>
                         </form>
                     )}
+
+                    <div className="demo-divider">
+                        <span>or</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="demo-button"
+                        onClick={handleDemoLogin}
+                        disabled={demoLoading}
+                    >
+                        {demoLoading ? 'Starting Demo...' : '🚀 Try Demo'}
+                    </button>
+                    <p className="demo-hint">No sign-up needed — explore all features instantly</p>
                 </div>
             </div>
         </div>

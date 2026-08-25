@@ -1,4 +1,11 @@
 {
+  "name": "perfect-cv-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "axios": "^1.8.4",

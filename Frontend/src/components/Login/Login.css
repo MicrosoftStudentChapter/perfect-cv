@@ -187,6 +187,73 @@
     text-align: center;
 }
 
+/* Demo divider */
+.demo-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 16px;
+}
+
+.demo-divider::before,
+.demo-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #E0E0E0;
+}
+
+.demo-divider span {
+    color: #9E9E9E;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Demo button */
+.demo-button {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    background: transparent;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    height: 45px;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.demo-button:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+.demo-button:disabled {
+    border-color: #cccccc;
+    color: #cccccc;
+    cursor: not-allowed;
+    background: transparent;
+}
+
+/* Demo hint text */
+.demo-hint {
+    text-align: center;
+    color: #9E9E9E;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .login-card {

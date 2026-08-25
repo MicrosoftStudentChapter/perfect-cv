@@ -30,4 +30,43 @@ const verifyOtp = async (req, res) => {
   res.json({ msg: 'Logged in', token });
 };
 
-module.exports = { sendOtp, verifyOtp };
+const demoLogin = async (req, res) => {
+  try {
+    const demoEmail = 'demo@perfectcv.com';
+    const demoUsername = 'Demo User';
+
+    // Find or create the demo user, reset their state for a fresh experience
+    let user = await User.findOne({ email: demoEmail });
+    if (!user) {
+      user = await User.create({
+        email: demoEmail,
+        username: demoUsername,
+        atsChecksRemaining: 2,
+        hasSubmitted: false,
+      });
+    } else {
+      // Reset demo user state so each demo session starts fresh
+      user.username = demoUsername;
+      user.otp = null;
+      user.atsChecksRemaining = 2;
+      user.hasSubmitted = false;
+      user.atsCheckHistory = [];
+      user.cloudinaryUrl = null;
+      user.atsScore = null;
+      await user.save();
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: demoEmail, username: demoUsername },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({ msg: 'Demo session started', token });
+  } catch (error) {
+    console.error('Demo login error:', error);
+    res.status(500).json({ msg: 'Failed to start demo session. Please try again.' });
+  }
+};
+
+module.exports = { sendOtp, verifyOtp, demoLogin };
