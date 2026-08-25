@@ -17,7 +17,7 @@ const Home = () => {
     const [atsScore, setAtsScore] = useState(null);
     const [atsFeedback, setAtsFeedback] = useState('');
     const [checksRemaining, setChecksRemaining] = useState(2);
-    const [jobDescription] = useState('Software developers');
+    const [jobDescription, setJobDescription] = useState('Software developers');
     const [isLoading, setIsLoading] = useState(false);
     const [currentResume, setCurrentResume] = useState(null);
     const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -455,8 +455,8 @@ const Home = () => {
                                         <h3>Job Description</h3>
                                         <textarea
                                             value={jobDescription}
-                                            readOnly
-                                            placeholder="Software developers"
+                                            onChange={(e) => setJobDescription(e.target.value)}
+                                            placeholder="e.g. Software developers, Data Analyst, etc."
                                             rows={3}
                                         />
                                     </div>

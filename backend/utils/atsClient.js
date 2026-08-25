@@ -28,32 +28,60 @@ ${extractMainPoints(geminiResult.feedback, openaiResult.feedback)}
  */
 function extractMainPoints(feedback1, feedback2) {
   // Combine and extract most important points from both feedbacks
-  // This is a simplified approach - we're using the first feedback as primary
-  // and adding unique insights from the second feedback
+  const keyPoints = [];
   
-  // Find bullet points, numbered lists, or key sections from feedback
-  const keyPointsRegex = /\n[•\-\*\d]+\s+([^\n]+)/g;
-  const keyPoints = new Set();
-  
-  // Extract points from first feedback
-  let match;
-  while ((match = keyPointsRegex.exec(feedback1)) !== null) {
-    keyPoints.add(match[1].trim());
-    if (keyPoints.size >= 4) break; // Limit to top points
+  // Multiple regex patterns to catch various AI output formats
+  const patterns = [
+    /(?:^|\n)\s*[\u2022\u2023\u25E6\u25AA\u25AB\u2013\u2014•\-\*]\s+(.+)/g,   // Bullet points (•, -, *, etc.)
+    /(?:^|\n)\s*\d+[\.\)]\s+(.+)/g,                                           // Numbered lists (1. or 1))
+    /(?:^|\n)\s*\*\*(.+?)\*\*/g,                                               // **bold text** lines
+    /(?:^|\n)\s*#{1,3}\s+(.+)/g,                                               // Markdown headers
+  ];
+
+  function extractFromText(text, maxPoints) {
+    const found = [];
+    for (const pattern of patterns) {
+      pattern.lastIndex = 0;
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        const point = match[1].trim().replace(/\*\*/g, '').replace(/^\*\s*/, '');
+        if (point.length > 10 && !containsSimilarPoint(new Set(found), point)) {
+          found.push(point);
+          if (found.length >= maxPoints) return found;
+        }
+      }
+    }
+    return found;
   }
-  
-  // Add unique points from second feedback
-  keyPointsRegex.lastIndex = 0; // Reset regex
-  while ((match = keyPointsRegex.exec(feedback2)) !== null) {
-    const point = match[1].trim();
-    if (!containsSimilarPoint(keyPoints, point)) {
-      keyPoints.add(point);
-      if (keyPoints.size >= 6) break; // Add up to 2 more unique points
+
+  // Extract from first feedback (primary)
+  const points1 = extractFromText(feedback1, 5);
+  keyPoints.push(...points1);
+
+  // Extract unique points from second feedback
+  const points2 = extractFromText(feedback2, 4);
+  for (const point of points2) {
+    if (!containsSimilarPoint(new Set(keyPoints), point)) {
+      keyPoints.push(point);
+      if (keyPoints.length >= 7) break;
     }
   }
-  
+
+  // Fallback: if no structured points were extracted, use raw feedback paragraphs
+  if (keyPoints.length === 0) {
+    const fallbackLines = (feedback1 + '\n' + feedback2)
+      .split('\n')
+      .map(l => l.trim().replace(/\*\*/g, '').replace(/^#+\s*/, ''))
+      .filter(l => l.length > 20 && !l.toLowerCase().startsWith('score'));
+    
+    for (const line of fallbackLines) {
+      keyPoints.push(line);
+      if (keyPoints.length >= 6) break;
+    }
+  }
+
   // Format as bullet points
-  return Array.from(keyPoints).map(point => `• ${point}`).join('\n\n');
+  return keyPoints.map(point => `• ${point}`).join('\n\n');
 }
 
 /**
