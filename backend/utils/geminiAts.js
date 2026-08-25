@@ -47,7 +47,7 @@ async function getGeminiATSScore(resumeText, jobDescription) {
     };
   } catch (error) {
     console.error('Error getting Gemini ATS score:', error);
-    return { score: 65, feedback: "Gemini API analysis failed. Please try again later." };
+    return { score: 65, feedback: `Gemini API analysis failed: ${error.message}` };
   }
 }
 

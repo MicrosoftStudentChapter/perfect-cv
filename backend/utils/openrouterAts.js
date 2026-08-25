@@ -58,7 +58,7 @@ async function getOpenRouterATSScore(resumeText, jobDescription) {
     };
   } catch (error) {
     console.error('Error getting OpenRouter ATS score:', error);
-    return { score: 65, feedback: "OpenAI analysis failed. Please try again later." };
+    return { score: 65, feedback: `OpenAI analysis failed: ${error.response?.data?.error?.message || error.message}` };
   }
 }
 
