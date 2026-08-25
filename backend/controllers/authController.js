@@ -65,7 +65,7 @@ const demoLogin = async (req, res) => {
     res.json({ msg: 'Demo session started', token });
   } catch (error) {
     console.error('Demo login error:', error);
-    res.status(500).json({ msg: 'Failed to start demo session. Please try again.' });
+    res.status(500).json({ msg: 'Failed to start demo session. Please try again.', error: error.message });
   }
 };
 
